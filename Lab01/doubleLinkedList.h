@@ -11,8 +11,6 @@ class doubleLinkedList
 
         Node* m_front;
 
-        Node* m_back;
-
     public:
         doubleLinkedList();
 
@@ -33,5 +31,7 @@ class doubleLinkedList
         bool removeFront();
 
         bool removeSelected(int val);
+
+        void printList() const;
 };
 #endif

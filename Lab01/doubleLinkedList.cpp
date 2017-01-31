@@ -1,12 +1,9 @@
 #include "doubleLinkedList.h"
 
-//USE RECURSIVE WITHIN METHODS
-
 doubleLinkedList::doubleLinkedList()
 {
     m_size=0;
     m_front=nullptr;
-    m_back=nullptr;
 }
 
 doubleLinkedList::~doubleLinkedList()
@@ -36,43 +33,230 @@ bool doubleLinkedList::isEmpty() const
 
 bool doubleLinkedList::search(int val) const
 {
-    //traverse list looking for val
-    //return true if found
-    //return false if not found
+     Node* temp=m_front;
+
+	//runs the search as long as the list isn't empty
+	if(!isEmpty())
+	{
+		//runs through the list until it reaches a node looking at nullptr
+		//in the case there is more than one node in the list
+		while(temp->getNext() != nullptr)
+		{
+			//comparing the current Node value to the value taken in
+			if(temp->getValue() == val)
+			{
+				//returns true if they match
+				return(true);
+			}
+			//keeps it moving through the list
+			temp=temp->getNext();
+		}
+		//if there's only one Node, it compares the value to that Node
+		if(temp->getValue() == val)
+		{
+			//returns true if they match
+			return(true);
+		}
+	}
+	//returns false if none of the values match
+	return(false);
 }
 
 void doubleLinkedList::addBack(int val)
 {
-    //add val to the back of the list
-    //increment m_size
+     //checking if the list is empty
+	if(isEmpty())
+	{
+		//if returns true, then starts a new list with the given value
+		m_front = new Node();
+		m_front->setValue(val);
+		//increments the size by one
+		m_size++;
+	}
+	//otherwise, going to add the provided value to the back of the list
+	else
+	{
+		//a new Node pointer to freely manipulate
+		Node* temp = m_front;
+		//moves through the list until it reaches the last node (looking at nullptr)
+		while(temp->getNext() != nullptr)
+		{
+			//keeps temp moving through the list
+			temp=temp->getNext();
+		}
+		//adding a node at the end with the given value
+		Node* last=new Node();
+		last->setValue(val);
+		temp->setNext(last);
+		//moving to the new node
+		temp=temp->getNext();
+		//setting the new node to look at nullptr
+		temp->setNext(nullptr);
+		//increments size by one
+		m_size++;
+
+	}
 }
 
-void douleLinkedList::addfront(int val)
+void doubleLinkedList::addFront(int val)
 {
-    //add val to the front of the list
-    //increment m_size
+     //checking if the list is empty
+  	if(isEmpty())
+  	{
+  		//if returns true, makes m_front a new list with the given value as the first node
+  		m_front = new Node();
+  		m_front->setValue(val);
+  		//increments size by one
+  		m_size++;
+  	}
+  	//otherwise, adds the given value to the front of the list
+  	else
+  	{
+  		//makes a new node pointer to freely manipulate
+  		Node* temp=m_front;
+
+  		//making m_front look at a "new" list with the first node as the given value
+  		m_front=new Node();
+  		m_front->setValue(val);
+  		//setting the next node to equal the list temp is looking at
+  		//Thus, reattaching the old list to the new node
+  		m_front->setNext(temp);
+  		//increments size by one
+  		m_size++;
+  	}
 }
 
 bool doubleLinkedList::removeBack()
 {
-    //remove last node
-    //set the current last node to look at nullptr
-    //decrement m_size
+     //checking if the lsit is empty
+	if(isEmpty())
+	{
+		//if it is in fact empty, returning false, since it removed nothing
+		return(false);
+	}
+	//otherwise, will go through the process to remove the last node
+	else
+	{
+		//making two new node pointers to manipulate
+		Node* temp1=m_front;
+		Node* temp2=m_front;
+
+		//moving temp1 through the list to reach the last node
+		while(temp1->getNext() != nullptr)
+		{
+			//keeping temp moving through the current list
+			temp1=temp1->getNext();
+		}
+		//moving temp2 throught the list to reach the second to last node
+		while(temp2->getNext() != temp1)
+		{
+			//keeps it going through the list
+			temp2=temp2->getNext();
+		}
+		//setting the second to the last node to look at nullptr
+		temp2->setNext(nullptr);
+		//deletes the last node
+		delete temp1;
+		//sets temp1 to look at nullptr, so we know where it's looking
+		temp1=nullptr;
+		//decrements the size by one
+		m_size--;
+		//returning true since it did remove a node
+		return(true);
+
+	}
 }
 
 bool doubleLinkedList::removeFront()
 {
-    //remove first node
-    //list should look at the new first node
-    //new first node should look at nullptr
-    //decrement m_size
+     //checking if the list is empty
+	if(isEmpty())
+	{
+		//returning false, since it removed nothing
+		return(false);
+	}
+	//otherwise, go through the process of removing the front node
+	else
+	{
+		//creating a new node to manipulate
+		Node* temp=m_front;
+
+		//m_front looking at the second node
+		m_front=m_front->getNext();
+		//deleting the first node
+		delete temp;
+		//set temp to look at null ptr, so we know where it's looking
+		temp=nullptr;
+		//decrements size by one
+		m_size--;
+		//returning true, since it did remove the front node
+		return(true);
+	}
 }
 
-bool removeselected(int val)
+bool doubleLinkedList::removeSelected(int val)
 {
     //remove val from the list
     //return true if found and successfully removed
     //return false if not found
     //make sure to reconnect the list halves
     //decrement m_size
+
+    //checking if the list is empty
+    if(isEmpty())
+    {
+         //returning false, since it removed nothing
+         return(false);
+    }
+    //otherwise, go through the process of removing the front node
+    else
+    {
+         //creating a new node to manipulate
+         Node* tempPrev=m_front;
+         Node* temp=tempPrev->getNext();
+
+
+         while(temp != nullptr)
+         {
+              if(tempPrev->getValue() == val)
+              {
+                   removeFront();
+                   m_size--;
+                   return(true);
+              }
+              else if(temp->getValue() == val)
+              {
+                   tempPrev->setNext(temp->getNext());
+                   delete temp;
+                   temp = nullptr;
+                   m_size--;
+                   return(true);
+              }
+              else
+              {
+                   tempPrev=tempPrev->getNext();
+                   temp=temp->getNext();
+              }
+         }
+         return(false);
+    }
+}
+
+void doubleLinkedList::printList() const
+{
+     std::cout<<"List: ";
+     if(isEmpty())
+     {
+          std::cout<<"EMPTY\n\n";
+     }
+     else
+     {
+          Node* temp=m_front;
+          while(temp != nullptr)
+          {
+               std::cout<<temp->getValue()<<" ";
+               temp=temp->getNext();
+          }
+     }
+     std::cout<<"\n\n";
 }

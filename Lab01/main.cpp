@@ -1,5 +1,6 @@
 #include <iostream>
-
+#include "doubleLinkedList.h"
+//COMMENTS
 //Due Monday
 
 void printMenu();
@@ -8,6 +9,8 @@ int main(int argc, char *argv[])
 {
     std::string filename;
     int choice=1;
+    doubleLinkedList list;
+
 
     //asking user for a file to make a double linked list
     std::cout<<"What is the filename to populate the linked list?\n";
