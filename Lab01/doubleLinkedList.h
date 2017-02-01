@@ -33,5 +33,7 @@ class doubleLinkedList
         bool removeSelected(int val);
 
         void printList() const;
+
+        //doubleLinkedList reverse();
 };
 #endif

@@ -260,3 +260,20 @@ void doubleLinkedList::printList() const
      }
      std::cout<<"\n\n";
 }
+/*
+doubleLinkedList doubleLinkedList::reverse()
+{
+     Node* temp=m_front;
+     doubleLinkedList newList;
+     if(!isEmpty())
+     {
+          while(temp != nullptr)
+          {
+               newList.addBack(temp->getValue());
+               temp=temp->getNext();
+          }
+     }
+
+     return(newList);
+}
+*/
