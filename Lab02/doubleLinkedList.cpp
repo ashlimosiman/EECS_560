@@ -10,7 +10,7 @@ doubleLinkedList::~doubleLinkedList()
 {
     while(!isEmpty())
     {
-        removeBack();
+        removeFront();
     }
 }
 
@@ -140,12 +140,10 @@ bool doubleLinkedList::removeBack()
 		{
 			//keeping temp moving through the current list
 			temp1=temp1->getNext();
-		}
-		//moving temp2 throught the list to reach the second to last node
-		while(temp2->getNext() != temp1)
-		{
-			//keeps it going through the list
-			temp2=temp2->getNext();
+               if(temp1->getNext() != nullptr)
+               {
+                    temp2 = temp2->getNext();
+               }
 		}
 		//setting the second to the last node to look at nullptr
 		temp2->setNext(nullptr);
