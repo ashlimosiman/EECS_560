@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "doubleLinkedList.h"
+#include "OpenHash.h"
 //COMMENTS
 
 void printMenu();
@@ -8,14 +9,18 @@ void printMenu();
 int main(int argc, char *argv[])
 {
     int choice=1;
-    doubleLinkedList list;
+
     std::ifstream init;
     int val=0;
 
     init.open("test.txt");
+
+    init>>val;
+    OpenHash table(val);
+
     while(init>>val)
     {
-         list.addBack(val);
+         table.insert(val);
     }
     init.close();
 
@@ -27,18 +32,11 @@ int main(int argc, char *argv[])
 
         if(choice == 1)//insert at the end
         {
-             int addVal = 0;
-             std::cout<<"Value to add: ";
-             std::cin>>addVal;
+             int newVal = 0;
+             std::cout<<"Value to insert: ";
+             std::cin>>newVal;
 
-             if(list.search(addVal))
-             {
-                  std::cout<<"Integer already in the list.\n";
-             }
-             else
-             {
-                  list.addBack(addVal);
-             }
+             table.insert(newVal);
         }
         else if(choice == 2)//delete node the user chooses
         {
@@ -46,19 +44,11 @@ int main(int argc, char *argv[])
              std::cout<<"Value to delete: ";
              std::cin>>delVal;
 
-             if(list.search(delVal))
-             {
-                  list.removeSelected(delVal);
-             }
-             else
-             {
-                  std::cout<<"Integer is not on the list.\n";
-             }
+             table.remove(delVal);
         }
-
         else if(choice == 3)//print list
         {
-             list.printList();
+             table.print();
         }
     }//end of while loop
 

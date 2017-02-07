@@ -2,7 +2,6 @@
 #define DOUBLE_LINKED_LIST_H
 
 #include <iostream>
-#include <vector>
 #include "Node.h"
 
 class doubleLinkedList
@@ -34,7 +33,5 @@ class doubleLinkedList
         bool removeSelected(int val);
 
         void printList() const;
-
-        std::vector<int> toVector() const;
 };
 #endif

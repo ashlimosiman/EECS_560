@@ -234,10 +234,9 @@ bool doubleLinkedList::removeSelected(int val)
 
 void doubleLinkedList::printList() const
 {
-     std::cout<<"List: ";
      if(isEmpty())
      {
-          std::cout<<"EMPTY\n\n";
+          //do nothing
      }
      else
      {
@@ -248,33 +247,5 @@ void doubleLinkedList::printList() const
                temp=temp->getNext();
           }
      }
-     std::cout<<"\n\n";
-}
-
-std::vector<int> doubleLinkedList::toVector() const
-{
-     Node* temp=m_front;
-	std::vector<int> v;
-
-	//only runs the method if the list is not empty
-	if(!isEmpty())
-	{
-		//For the case, there's more than one Node
-		//continues through the list while the current Node isn't pointing to nullptr
-		while(temp->getNext() != nullptr)
-		{
-			//adds the value to the established vector, v
-			v.push_back(temp->getValue());
-			//keeps moving through the list
-			temp=temp->getNext();
-		}
-		//if only one Node, adds that value to the established vector, v
-		if(temp != nullptr)
-		{
-			v.push_back(temp->getValue());
-		}
-	}
-
-	//returns the vector, v
-	return(v);
+     std::cout<<"\n";
 }
