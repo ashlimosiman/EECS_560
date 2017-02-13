@@ -30,13 +30,14 @@ int main(int argc, char *argv[])
         printMenu();
         std::cin>>choice;
 
-        if(choice == 1)//insert at the end
+        if(choice == 1)//insert at the front of the chain of the correct index
         {
              int newVal = 0;
              std::cout<<"Value to insert: ";
              std::cin>>newVal;
 
              table.insert(newVal);
+             std::cout<<'\n';
         }
         else if(choice == 2)//delete node the user chooses
         {
@@ -45,6 +46,7 @@ int main(int argc, char *argv[])
              std::cin>>delVal;
 
              table.remove(delVal);
+             std::cout<<'\n';
         }
         else if(choice == 3)//print list
         {

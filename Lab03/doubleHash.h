@@ -10,7 +10,7 @@ class doubleHash
         int m_numEntries;
         int* m_table;
         bool* indexFlag;
-        int hash(int key);
+        int hash(int key, int check);
 
     public:
         doubleHash();

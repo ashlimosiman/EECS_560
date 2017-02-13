@@ -5,20 +5,22 @@
 
 //flag is true if index had a number but was deleted
 
-void printMenu();
-int hashMethod();
+void printMenu();//prints the menu of options the user has
+int hashMethod();//prints options of hashing methods, returns value associated with hashing method choice
 
 int main(int argc, char *argv[])
 {
-    /*initializing*/
+/*initializing*/
     int choice=1;
     int hashOpt = hashMethod();
     std::ifstream init;
     int val=0;
+/*-----------*/
 
+/*placing values from a text file into the hash table using user's choice of method*/
     init.open("test.txt");
 
-    init>>val;
+    init>>val;//taking in size of hash table
     //OpenHash table(val);
     //int* hashTable = new int[val];
 /*
@@ -27,7 +29,15 @@ int main(int argc, char *argv[])
          table.insert(val);
     }*/
     init.close();
+/*-----------------------*/
 
+/*Double Hashing*/
+
+/*--------------*/
+
+/*Quadratic Hashing*/
+
+/*-----------------*/
     while(choice > 0 && choice < 4)
     {
         //printing options and taking in user's choice
@@ -56,17 +66,15 @@ int main(int argc, char *argv[])
         }
     }//end of while loop
 
-    if(choice != 4)//user doesn't make a valid choice from the menu
+    if(choice != 4 || hashOpt != 3)//user doesn't make a valid choice from the menu or didn't make a valid hashing option
     {
         std::cout<<"Error: Number chosen was not an option\n"
                 <<"Quitting...\n";
     }
-    else//user chose 5
+    else//user chose 4 or the user 
     {
         std::cout<<"Thank You!\n\n";
     }
-
-    //delete[] hashTable;
 
     return(0);
 }
