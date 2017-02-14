@@ -41,7 +41,7 @@ int doubleHash::hash(int key, int check)
     if(i >= m_size)//after m_size checks, could not place value
     {
 
-         return(1000);
+         return(-2);
     }
     else if(m_table[h] == (-1))
     {
@@ -55,7 +55,7 @@ int doubleHash::hash(int key, int check)
             {
                  i++;
                   index = hash(key, i);
-                  if(index == 1000)//legit index was not found
+                  if(index == (-2))//legit index was not found
                   {
                        index = m_initIndex;
                        m_initExists = false;
@@ -67,7 +67,7 @@ int doubleHash::hash(int key, int check)
                   m_initExists = true;
                   i++;
                   index = hash(key, i);
-                  if(index == 1000)//legit index was not found
+                  if(index == (-2))//legit index was not found
                   {
                        index = m_initIndex;
                        m_initExists = false;
@@ -101,7 +101,7 @@ void doubleHash::insert(int val)
          std::cout<<val<<" is already in the table.\n";
          return;
     }
-    else if(index == 1000)//hash() returned (-1) and printed error, so returns
+    else if(index == (-2))//hash() returned (-1) and printed error, so returns
     {
          std::cout<<"Error: could not place "<<val<<".\n";
          return;

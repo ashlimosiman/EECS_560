@@ -38,7 +38,7 @@ int quadHash::hash(int key, int check)
 
     if(i >= m_size)//checked m_size times
     {
-         return(1000);
+         return(-2);
     }
     else if(m_table[h] == (-1))//spot available
     {
@@ -52,7 +52,7 @@ int quadHash::hash(int key, int check)
               {
                    i++;
                    index = hash(key, i);
-                   if(index == 1000)//legit index was not found
+                   if(index == (-2))//legit index was not found
                    {
                         index = m_initIndex;
                         m_initExists = false;
@@ -64,7 +64,7 @@ int quadHash::hash(int key, int check)
                    m_initExists = true;
                    i++;
                    index = hash(key, i);
-                   if(index == 1000)//legit index was not found
+                   if(index == (-2))//legit index was not found
                    {
                         index = m_initIndex;
                         m_initExists = false;
@@ -99,7 +99,7 @@ void quadHash::insert(int val)
           std::cout<<val<<" is already in the table.\n";
           return;
      }
-     else if(index == 1000)
+     else if(index == (-2))
      {
           std::cout<<"Error: could not place "<<val<<".\n";
           return;
