@@ -1,9 +1,8 @@
 #include <iostream>
 #include <fstream>
 
-//COMMENTS
-
-//flag is true if index had a number but was deleted
+#include "doubleHash.h"
+#include "quadHash.h"
 
 void printMenu();//prints the menu of options the user has
 int hashMethod();//prints options of hashing methods, returns value associated with hashing method choice
@@ -17,61 +16,104 @@ int main(int argc, char *argv[])
     int val=0;
 /*-----------*/
 
-/*placing values from a text file into the hash table using user's choice of method*/
-    init.open("test.txt");
-
-    init>>val;//taking in size of hash table
-    //OpenHash table(val);
-    //int* hashTable = new int[val];
-/*
-    while(init>>val)
-    {
-         table.insert(val);
-    }*/
-    init.close();
 /*-----------------------*/
 
 /*Double Hashing*/
+     if(hashOpt == 2)
+     {
+          init.open("test.txt");
 
+          init>>val;//taking in size of hash table
+          doubleHash table(val);
+
+          while(init>>val)//filling table from file
+          {
+               table.insert(val);
+          }
+
+          init.close();
+
+          while(choice != 4)
+          {
+               printMenu();//printing user's options
+               std::cin>>choice;
+
+               if(choice == 1)//insert
+               {
+                    int newVal = 0;
+                    std::cout<<"Which number do you want to insert into the hash table?\n";
+                    std::cin>>newVal;
+
+                    table.insert(newVal);
+               }
+               else if(choice == 2)//delete value
+               {
+                    int delValue = 0;
+                    std::cout<<"What number do you want to remove from the hash table?\n";
+                    std::cin>>delValue;
+
+                    table.remove(delValue);
+               }
+               else if(choice == 3)//print table
+               {
+                    table.print();
+               }
+               else if(choice != 4)//not 1 through 4
+               {
+                    std::cout<<"Error: That was not an option.\n\n";
+               }
+          }
+     }
 /*--------------*/
 
 /*Quadratic Hashing*/
+     if(hashOpt == 1)
+     {
+          init.open("test.txt");
+          init>>val;//taking in size of hash table
+          quadHash table(val);
 
+          while(init>>val)//filling table from file
+          {
+               table.insert(val);
+          }
+
+          init.close();
+
+          while(choice != 4)
+          {
+               printMenu();//printing user's options
+               std::cin>>choice;
+
+               if(choice == 1)//insert
+               {
+                    int newVal = 0;
+                    std::cout<<"Which number do you want to insert into the hash table?\n";
+                    std::cin>>newVal;
+
+                    table.insert(newVal);
+               }
+               else if(choice == 2)//delete value
+               {
+                    int delValue = 0;
+                    std::cout<<"What number do you want to remove from the hash table?\n";
+                    std::cin>>delValue;
+
+                    table.remove(delValue);
+               }
+               else if(choice == 3)//print table
+               {
+                    table.print();
+               }
+               else if(choice != 4)//not 1 through 4
+               {
+                    std::cout<<"Error: That was not an option.\n\n";
+               }
+          }
+     }
 /*-----------------*/
-    while(choice > 0 && choice < 4)
-    {
-        //printing options and taking in user's choice
-        printMenu();
-        std::cin>>choice;
 
-        if(choice == 1)//insert at the end
-        {
-            /* int newVal = 0;
-             std::cout<<"Value to insert: ";
-             std::cin>>newVal;
-
-             table.insert(newVal);*/
-        }
-        else if(choice == 2)//delete node the user chooses
-        {
-            /* int delVal = 0;
-             std::cout<<"Value to delete: ";
-             std::cin>>delVal;
-
-             table.remove(delVal);*/
-        }
-        else if(choice == 3)//print list
-        {
-             //table.print();
-        }
-    }//end of while loop
-
-    if(choice != 4 || hashOpt != 3)//user doesn't make a valid choice from the menu or didn't make a valid hashing option
-    {
-        std::cout<<"Error: Number chosen was not an option\n"
-                <<"Quitting...\n";
-    }
-    else//user chose 4 or the user 
+    if(choice == 4 || hashOpt == 3)//user chose the quit option from one of the menus
     {
         std::cout<<"Thank You!\n\n";
     }

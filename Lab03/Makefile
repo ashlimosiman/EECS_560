@@ -1,5 +1,5 @@
-lab3: main.o
-	g++ -g -std=c++11 -Wall main.o -o lab3
+lab3: main.o doubleHash.o quadHash.o
+	g++ -g -std=c++11 -Wall main.o doubleHash.o quadHash.o -o lab3
 
 main.o: main.cpp
 	g++ -g -std=c++11 -Wall -c main.cpp

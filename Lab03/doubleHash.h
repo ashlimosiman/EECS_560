@@ -10,6 +10,8 @@ class doubleHash
         int m_numEntries;
         int* m_table;
         bool* indexFlag;
+        int m_initIndex;
+        bool m_initExists;
         int hash(int key, int check);
 
     public:

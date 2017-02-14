@@ -4,19 +4,27 @@ quadHash::quadHash()
 {
     m_size = 1;
     m_numEntries = 0;
+    m_initIndex = (-1);
+    m_initExists = false;
     m_table = new int[m_size];
     indexFlag = new bool[m_size];
+
+    initTable();
 }
 
 quadHash::quadHash(int size)
 {
     m_size = size;
     m_numEntries = 0;
+    m_initIndex = (-1);
+    m_initExists = false;
     m_table = new int[m_size];
     indexFlag = new bool[m_size];
+
+    initTable();
 }
 
-quadHash::~quadhash()
+quadHash::~quadHash()
 {
     delete[] m_table;
     delete[] indexFlag;
@@ -25,40 +33,52 @@ quadHash::~quadhash()
 int quadHash::hash(int key, int check)
 {
     int i = check;
+    int index = 0;
+    int h = ((key % m_size) + (i * i)) % m_size;//producing hash index
 
-    if(contains(key))//it's in the table
+    if(i >= m_size)//checked m_size times
     {
-         std::cout<<key<<" is already in the table.\n";
-         return(-1);
+         return(1000);
     }
-    else if(i >= m_size)//after m_size checks, could not place value
+    else if(m_table[h] == (-1))//spot available
     {
-         std::cout<<"Error: could not place value.\n";
-         return(-1);
-    }
-    else//finding hash value
-    {
-
-         //HOW TO GET BACK TO INITIAL "TRUE" AVAILABLE SPOT
-
-         int index = 0;
-         int h = ((key % m_size) + (i * i)) % m_size;//producing hash index
-         if(m_table[h] == (-1))//check if space is available
+         if(indexFlag[h] == false)//been empty since the dawn of time
          {
-            if(indexFlag[h] == true)//check if it has had a value before
-            {
-                  index = hash(key, i++);//see if there is an available space without deletion
-            }
-            else
-            {
-                  return(h);
-            }
+              index = h;
          }
-         else//space isn't available
+         else//emptied by deletion
          {
-              index = hash(key, i++);
+              if(m_initExists == true)
+              {
+                   i++;
+                   index = hash(key, i);
+                   if(index == 1000)//legit index was not found
+                   {
+                        index = m_initIndex;
+                        m_initExists = false;
+                   }
+              }
+              else
+              {
+                   m_initIndex = h;
+                   m_initExists = true;
+                   i++;
+                   index = hash(key, i);
+                   if(index == 1000)//legit index was not found
+                   {
+                        index = m_initIndex;
+                        m_initExists = false;
+                   }
+              }
          }
     }
+    else//spot is not available
+    {
+         i++;
+         index = hash(key, i);
+    }
+
+    return(index);
 }
 
 void quadHash::initTable()
@@ -74,8 +94,14 @@ void quadHash::insert(int val)
 {
      int index = hash(val, 0);//getting hash index for the value
 
-     if(index == (-1))//invalid hash index, so it returns
+     if(contains(val))//invalid hash index, so it returns
      {
+          std::cout<<val<<" is already in the table.\n";
+          return;
+     }
+     else if(index == 1000)
+     {
+          std::cout<<"Error: could not place "<<val<<".\n";
           return;
      }
      else//valid hash index, so places value in that index
@@ -108,7 +134,15 @@ void quadHash::print() const
 {
     for(int x = 0; x < m_size; x++)//traversing through both tables and printing hash values and flag values
     {
-        std::cout<<x<<": "<<m_table[x]<<" flag = "<<indexFlag[x]<<'\n';
+        std::cout<<x<<": "<<m_table[x]<<" flag = ";
+        if(indexFlag[x] == 0)
+        {
+             std::cout<<"FALSE\n";
+        }
+        else
+        {
+             std::cout<<"TRUE\n";
+        }
     }
 }
 

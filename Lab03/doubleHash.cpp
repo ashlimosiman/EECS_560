@@ -4,63 +4,84 @@ doubleHash::doubleHash()
 {
     m_size = 1;
     m_numEntries = 0;
+    m_initIndex = (-1);
+    m_initExists = false;
     indexFlag = new bool[m_size];
     m_table = new int[m_size];
+
+    initTable();
 }
 
 doubleHash::doubleHash(int size)
 {
     m_size = size;
     m_numEntries = 0;
+    m_initIndex = (-1);
+    m_initExists = false;
     indexFlag = new bool[m_size];
     m_table = new int[m_size];
+
+    initTable();
 }
 
-doublehash::~doubleHash()
+doubleHash::~doubleHash()
 {
     delete[] m_table;
-    delete[] m_indexFlag;
+    delete[] indexFlag;
 }
 
 int doubleHash::hash(int key, int check)
 {
     int p = 5;
     int i = check;
-    int hPlus = 5 - (key % 5);
+    int index = 0;
+    int hPlus = p - (key % p);
+    int h = ((key % m_size) + (i * hPlus)) % m_size;//producing hash index
 
-    if(contains(key))//it's in the table
-    {
-         std::cout<<key<<" is already in the table.\n";
-         return(-1);
-    }
-    else if(i >= m_size)//after m_size checks, could not place value
-    {
-         std::cout<<"Error: could not place value.\n";
-         return(-1);
-    }
-    else//finding hash value
+    if(i >= m_size)//after m_size checks, could not place value
     {
 
-         //HOW TO GET BACK TO INITIAL "TRUE" AVAILABLE SPOT
-
-         int index = 0;
-         int h = ((key % m_size) + (i * hPlus)) % m_size;//producing hash index
-         if(m_table[h] == (-1))//check if space is available
-         {
-             if(indexFlag[h] == true)//check if it has had a value before
-             {
-                  index = hash(key, i++);//see if there is an available space without deletion
-             }
-             else
-             {
-                  return(h);
-             }
-         }
-         else//space isn't available
-         {
-              index = hash(key, i++);
-         }
+         return(1000);
     }
+    else if(m_table[h] == (-1))
+    {
+         if(indexFlag[h] == false)//been empty since the dawn of time
+        {
+            index = h;
+        }
+        else//emptied by deletion
+        {
+            if(m_initExists == true)
+            {
+                 i++;
+                  index = hash(key, i);
+                  if(index == 1000)//legit index was not found
+                  {
+                       index = m_initIndex;
+                       m_initExists = false;
+                  }
+            }
+            else
+            {
+                  m_initIndex = h;
+                  m_initExists = true;
+                  i++;
+                  index = hash(key, i);
+                  if(index == 1000)//legit index was not found
+                  {
+                       index = m_initIndex;
+                       m_initExists = false;
+                  }
+            }
+        }
+   }
+   else//spot is not available
+   {
+        i++;
+        index = hash(key, i);
+   }
+
+   return(index);
 }
 
 void doubleHash::initTable()
@@ -75,8 +96,14 @@ void doubleHash::initTable()
 void doubleHash::insert(int val)
 {
     int index = hash(val, 0);//getting table index
-    if(index == (-1))//hash() returned (-1) and printed error, so returns
+    if(contains(val))//it's in the table
     {
+         std::cout<<val<<" is already in the table.\n";
+         return;
+    }
+    else if(index == 1000)//hash() returned (-1) and printed error, so returns
+    {
+         std::cout<<"Error: could not place "<<val<<".\n";
          return;
     }
     else//got a valid index number and places value
@@ -105,11 +132,19 @@ bool doubleHash::remove(int val)
     return(false);//returning false, since the value was not removed
 }
 
-void doubleHash::print()
+void doubleHash::print() const
 {
     for(int x = 0; x < m_size; x++)//traversing through the tables and printing values and flag values
     {
-        std::cout<<x<<": "<<m_table[x]<<" flag = "<<indexFlag[x]<<'\n';
+        std::cout<<x<<": "<<m_table[x]<<" flag = ";
+        if(indexFlag[x] == 0)
+        {
+             std::cout<<"FALSE\n";
+        }
+        else
+        {
+             std::cout<<"TRUE\n";
+        }
     }
 }
 
