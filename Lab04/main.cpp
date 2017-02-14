@@ -1,12 +1,17 @@
 #include <iostream>
 #include <fstream>
 
+#include "OpenHash.h"
+#include "doubleHash.h"
+#include "quadHash.h"
+
 void printMenu();//prints the menu of options the user has
 int hashMethod();//prints options of hashing methods, returns value associated with hashing method choice
 
 int main(int argc, char *argv[])
 {
 /*initializing*/
+    const int tableSize = 600011;//required size of hashing tables
     int choice=1;
     int hashOpt = hashMethod();
     std::ifstream init;
