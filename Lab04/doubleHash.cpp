@@ -2,6 +2,7 @@
 
 doubleHash::doubleHash()
 {
+     numChecks = 1;
     m_size = 1;
     m_numEntries = 0;
     m_initIndex = (-1);
@@ -12,8 +13,9 @@ doubleHash::doubleHash()
     initTable();
 }
 
-doubleHash::doubleHash(int size)
+doubleHash::doubleHash(int size, int checks)
 {
+     numChecks = checks;
     m_size = size;
     m_numEntries = 0;
     m_initIndex = (-1);
@@ -38,7 +40,7 @@ int doubleHash::hash(int key, int check)
     int hPlus = p - (key % p);
     int h = ((key % m_size) + (i * hPlus)) % m_size;//producing hash index
 
-    if(i >= m_size)//after m_size checks, could not place value
+    if(i >= numChecks)//after numChecks checks, could not place value
     {
 
          return(-2);

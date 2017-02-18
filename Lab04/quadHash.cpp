@@ -2,6 +2,7 @@
 
 quadHash::quadHash()
 {
+     numChecks = 1;
     m_size = 1;
     m_numEntries = 0;
     m_initIndex = (-1);
@@ -12,8 +13,9 @@ quadHash::quadHash()
     initTable();
 }
 
-quadHash::quadHash(int size)
+quadHash::quadHash(int size, int checks)
 {
+     numChecks = checks;
     m_size = size;
     m_numEntries = 0;
     m_initIndex = (-1);
@@ -36,7 +38,7 @@ int quadHash::hash(int key, int check)
     int index = 0;
     int h = ((key % m_size) + (i * i)) % m_size;//producing hash index
 
-    if(i >= m_size)//checked m_size times
+    if(i >= numChecks)//checked numChecks times
     {
          return(-2);
     }

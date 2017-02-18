@@ -6,6 +6,7 @@
 class quadHash
 {
     private:
+        int numChecks;
         int m_size;
         int m_numEntries;
         int* m_table;
@@ -16,7 +17,7 @@ class quadHash
 
     public:
         quadHash();
-        quadHash(int size);
+        quadHash(int size, int checks);
         ~quadHash();
         void initTable();
         void insert(int val);

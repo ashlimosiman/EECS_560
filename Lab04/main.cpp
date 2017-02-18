@@ -1,144 +1,58 @@
 #include <iostream>
 #include <fstream>
+#include <stdlib.h>
 
+#include"Timer.h"
 #include "OpenHash.h"
 #include "doubleHash.h"
 #include "quadHash.h"
 
-void printMenu();//prints the menu of options the user has
-int hashMethod();//prints options of hashing methods, returns value associated with hashing method choice
+/*
+                    LAB INSTRUCTIONS
+               --------------------------
+     In this lab, you will do some time performance measuring on three hashing methods you programmed on Lab2 and Lab3. ADDED
+     Choose the size of the hash table as 600011 (prime number), ADDED
+     start the timer and generate random numbers between 1 to 2,147,483,647 (long)
+     for load factor 0.2, 0.3, 0.4…0.9; save the time for each load factor. ADDED
+     Let K be 60000 (The number of times trying to find a place to insert an element). ADDED
+     There should be no duplication in the hash table, so be careful to first search for the number and if not in the table then add it.
+     rand() and srand() and Timer class will be discussed in the lab.
+     Calculate the total time for the different load factors and different probing method (open hashing, quadratic and double hashing).
+     Apply for 5 different seeds and calculate the average.
+     Mention the time for 5 different seeds in your report, and draw a chart for the average time (time versus load factor).
+     To ensure that the timing tests are “fair,” you must use the same seed for the random number generator for each structure.
+     Submit a report to discuss:
+          (1) The overall organization of your experiment,
+          (2) Data generation,
+          (3) Summary of results (CPU timing)
+          (4) Observation and conclusion.
+     **The most important part of this lab is your report.**
+*/
 
 int main(int argc, char *argv[])
 {
 /*initializing*/
-    const int tableSize = 600011;//required size of hashing tables
-    int choice=1;
-    int hashOpt = hashMethod();
-    std::ifstream init;
-    int val=0;
+     const int tableSize = 600011;//required size of hashing tables
+     const int K = 60000;//num times to attempt placing value
+     int choice=1;
+     OpenHash o_table(tableSize);
+     doubleHash d_table(tableSize, K);
+     quadHash q_table(tableSize, K);
+     double loadFactor[8] = {0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
 /*-----------*/
 
-/*-----------------------*/
-
-/*Double Hashing*/
-    /* if(hashOpt == 2)
+     srand(5);
+     int n=0;
+     while(n < 10)
      {
-          init.open("test.txt");
-
-          init>>val;//taking in size of hash table
-          doubleHash table(val);
-
-          while(init>>val)//filling table from file
+          std::cout<<rand()<<'\n';
+          if(n < 8)
           {
-               table.insert(val);
+               std::cout<<"loadFactor: "<<loadFactor[n]<<'\n';
           }
+          n++;
+     }
 
-          init.close();
 
-          while(choice != 4)
-          {
-               printMenu();//printing user's options
-               std::cin>>choice;
-
-               if(choice == 1)//insert
-               {
-                    int newVal = 0;
-                    std::cout<<"Which number do you want to insert into the hash table?\n";
-                    std::cin>>newVal;
-
-                    table.insert(newVal);
-               }
-               else if(choice == 2)//delete value
-               {
-                    int delValue = 0;
-                    std::cout<<"What number do you want to remove from the hash table?\n";
-                    std::cin>>delValue;
-
-                    table.remove(delValue);
-               }
-               else if(choice == 3)//print table
-               {
-                    table.print();
-               }
-               else if(choice != 4)//not 1 through 4
-               {
-                    std::cout<<"Error: That was not an option.\n\n";
-               }
-          }
-     }*/
-/*--------------*/
-
-/*Quadratic Hashing*/
-    /* if(hashOpt == 1)
-     {
-          init.open("test.txt");
-          init>>val;//taking in size of hash table
-          quadHash table(val);
-
-          while(init>>val)//filling table from file
-          {
-               table.insert(val);
-          }
-
-          init.close();
-
-          while(choice != 4)
-          {
-               printMenu();//printing user's options
-               std::cin>>choice;
-
-               if(choice == 1)//insert
-               {
-                    int newVal = 0;
-                    std::cout<<"Which number do you want to insert into the hash table?\n";
-                    std::cin>>newVal;
-
-                    table.insert(newVal);
-               }
-               else if(choice == 2)//delete value
-               {
-                    int delValue = 0;
-                    std::cout<<"What number do you want to remove from the hash table?\n";
-                    std::cin>>delValue;
-
-                    table.remove(delValue);
-               }
-               else if(choice == 3)//print table
-               {
-                    table.print();
-               }
-               else if(choice != 4)//not 1 through 4
-               {
-                    std::cout<<"Error: That was not an option.\n\n";
-               }
-          }
-     }*/
-/*-----------------*/
-
-    /*if(choice == 4 || hashOpt == 3)//user chose the quit option from one of the menus
-    {
-        std::cout<<"Thank You!\n\n";
-    }*/
-
-    return(0);
-}
-
-void printMenu()
-{
-    std::cout<<"Please choose one of the following commands:\n"
-            <<"1- Insert\n"
-            <<"2- Delete\n"
-            <<"3- Print\n"
-            <<"4- Exit\n";
-}
-
-int hashMethod()
-{
-    int choice = 0;
-    std::cout<<"Please choose one of the following hash methods: \n"
-            <<"1-quadratic\n"
-            <<"2-double hashing\n"
-            <<"3-exit\n";
-    std::cin>>choice;
-    return(choice);
+     return(0);
 }

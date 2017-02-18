@@ -1,7 +1,7 @@
 lab4: main.o Node.o LinkedList.o OpenHash.o doubleHash.o quadHash.o
 	g++ -g -std=c++11 -Wall main.o Node.o LinkedList.o OpenHash.o doubleHash.o quadHash.o -o lab4
 
-main.o: main.cpp
+main.o: main.cpp Timer.h
 	g++ -g -std=c++11 -Wall -c main.cpp
 
 Node.o: Node.cpp Node.h

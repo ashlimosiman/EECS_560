@@ -6,6 +6,7 @@
 class doubleHash
 {
     private:
+        int numChecks;
         int m_size;
         int m_numEntries;
         int* m_table;
@@ -16,7 +17,7 @@ class doubleHash
 
     public:
         doubleHash();
-        doubleHash(int size);
+        doubleHash(int size, int checks);
         ~doubleHash();
         void initTable();
         void insert(int val);
