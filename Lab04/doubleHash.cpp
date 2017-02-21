@@ -103,7 +103,7 @@ void doubleHash::insert(int val)
          std::cout<<val<<" is already in the table.\n";
          return;
     }
-    else if(index == (-2))//hash() returned (-1) and printed error, so returns
+    else if(index == (-2))//hash() returned (-2) and printed error, so returns
     {
          std::cout<<"Error: could not place "<<val<<".\n";
          return;

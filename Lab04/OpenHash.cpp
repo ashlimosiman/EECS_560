@@ -78,3 +78,14 @@ bool OpenHash::find(int key) const
      }
      return(false);
 }
+
+void OpenHash::reset()
+{
+     for(int x = 0; x < m_size; x++)
+     {
+          while(!(m_table[x].isEmpty()))
+          {
+               m_table[x].removeFront();
+          }
+     }
+}

@@ -1,5 +1,5 @@
-lab4: main.o Node.o LinkedList.o OpenHash.o doubleHash.o quadHash.o
-	g++ -g -std=c++11 -Wall main.o Node.o LinkedList.o OpenHash.o doubleHash.o quadHash.o -o lab4
+lab4: main.o Node.o LinkedList.o OpenHash.o doubleHash.o quadHash.o Executive.o
+	g++ -g -std=c++11 -Wall main.o Node.o LinkedList.o OpenHash.o doubleHash.o quadHash.o Executive.o -o lab4
 
 main.o: main.cpp Timer.h
 	g++ -g -std=c++11 -Wall -c main.cpp
@@ -18,6 +18,9 @@ doubleHash.o: doubleHash.cpp doubleHash.h
 
 quadHash.o: quadHash.cpp quadHash.h
 	g++ -g -std=c++11 -Wall -c quadHash.cpp
+
+Executive.o: Executive.cpp Executive.h
+	g++ -g -std=c++11 -Wall -c Executive.cpp
 
 clean:
 	rm *.o lab4

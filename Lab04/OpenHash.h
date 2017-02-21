@@ -20,5 +20,6 @@ class OpenHash
           bool remove(int val);
           void print() const;
           bool find(int key) const;
+          void reset();
 };
 #endif
