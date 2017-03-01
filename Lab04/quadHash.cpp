@@ -44,7 +44,8 @@ int quadHash::hash(int key, int check)
     }
     else if(m_table[h] == (-1))//spot available
     {
-         if(indexFlag[h] == false)//been empty since the dawn of time
+         index = h;
+         /*if(indexFlag[h] == false)//been empty since the dawn of time
          {
               index = h;
          }
@@ -72,7 +73,7 @@ int quadHash::hash(int key, int check)
                         m_initExists = false;
                    }
               }
-         }
+         }*/
     }
     else//spot is not available
     {
@@ -98,7 +99,7 @@ void quadHash::insert(int val)
 
      if(contains(val))//invalid hash index, so it returns
      {
-          std::cout<<val<<" is already in the table.\n";
+          //std::cout<<val<<" is already in the table.\n";
           return;
      }
      else if(index == (-2))

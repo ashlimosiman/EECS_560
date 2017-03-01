@@ -47,7 +47,8 @@ int doubleHash::hash(int key, int check)
     }
     else if(m_table[h] == (-1))
     {
-         if(indexFlag[h] == false)//been empty since the dawn of time
+         index = h;
+        /* if(indexFlag[h] == false)//been empty since the dawn of time
         {
             index = h;
         }
@@ -75,7 +76,7 @@ int doubleHash::hash(int key, int check)
                        m_initExists = false;
                   }
             }
-        }
+       }*/
    }
    else//spot is not available
    {
@@ -100,7 +101,7 @@ void doubleHash::insert(int val)
     int index = hash(val, 0);//getting table index
     if(contains(val))//it's in the table
     {
-         std::cout<<val<<" is already in the table.\n";
+         //std::cout<<val<<" is already in the table.\n";
          return;
     }
     else if(index == (-2))//hash() returned (-2) and printed error, so returns

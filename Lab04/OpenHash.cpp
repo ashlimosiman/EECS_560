@@ -24,7 +24,7 @@ void OpenHash::insert(int val)
      int place = hash(val);
      if(m_table[place].search(val))
      {
-          std::cout<<val<<" is already in the table.\n";
+          //std::cout<<val<<" is already in the table.\n";
      }
      else
      {
