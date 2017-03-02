@@ -44,30 +44,30 @@ bool BST::insert(int value)
 
 void BST::recInsert(int value, Node*currNode)
 {
-     if(value < currNode->getValue())
+     if(value < currNode->getValue())//in left subtree
      {
-          if(currNode->getLeft() == nullptr)
+          if(currNode->getLeft() == nullptr)//found a "home"
           {
                Node* newbie = new Node();
                newbie->setValue(value);
 
                currNode->setLeft(newbie);
           }
-          else
+          else//keep looking
           {
                recInsert(value, currNode->getLeft());
           }
      }
-     else
+     else//in right subtree
      {
-          if(currNode->getRight() == nullptr)
+          if(currNode->getRight() == nullptr)//found a "home"
           {
                Node* newbie = new Node();
                newbie->setValue(value);
 
                currNode->setRight(newbie);
           }
-          else
+          else//keep looking
           {
                recInsert(value, currNode->getRight());
           }
@@ -325,10 +325,10 @@ void BST::levelorder()
 
 int BST::getMin()
 {
-     return(findMin(m_root));
+     return(findMin(m_root));//returning minimum value in tree
 }
 
 int BST::getMax()
 {
-     return(findMax(m_root));
+     return(findMax(m_root));//returning maximum value in tree
 }
