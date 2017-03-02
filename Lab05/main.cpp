@@ -31,28 +31,40 @@ int main(int argc, char *argv[])
 
           if(choice == 1)//insert
           {
-               int newVal = 0;
+               int newbie = 0;
                std::cout<<"Value to insert: ";
-               std::cin>>newVal;
-               mainTree.insert(newVal);
+               std::cin>>newbie;
+               if(mainTree.insert(newbie))
+               {
+                    std::cout<<newbie<<" placed in tree\n";
+               }
           }
           else if(choice == 2)//remove
           {
                int deleter = 0;
                std::cout<<"Value to remove: ";
                std::cin>>deleter;
-               mainTree.remove(deleter);
-               std::cout<<"\n\nWARNING: Not deleting just yet\n\n";
+               if(mainTree.remove(deleter))
+               {
+                    std::cout<<deleter<<" removed\n";
+               }
           }
           else if(choice == 3)//deletemin
           {
-               mainTree.deletemin();
-               std::cout<<"\n\nWARNING: Not deleting just yet\n\n";
+               int minnie = mainTree.getMin();
+
+               if(mainTree.deletemin())
+               {
+                    std::cout<<minnie<<" removed\n";
+               }
           }
           else if(choice == 4)//deletemax
           {
-               mainTree.deletemax();
-               std::cout<<"\n\nWARNING: Not deleting just yet\n\n";
+               int maxie = mainTree.getMax();
+               if(mainTree.deletemax())
+               {
+                    std::cout<<maxie<<" removed\n";
+               }
           }
           else if(choice == 5)//preorder
           {
@@ -65,7 +77,6 @@ int main(int argc, char *argv[])
           else if(choice == 7)//levelorder
           {
                mainTree.levelorder();
-               std::cout<<"\n\nWARNING: Not printing just yet\n\n";
           }
           else if(choice < 1 || choice > 8) // not an option
           {

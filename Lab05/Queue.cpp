@@ -1,15 +1,13 @@
 #include "Queue.h"
 
-template <typename T>
-Queue<T>::Queue()
+Queue::Queue()
 {
 	//sets private member variables to their respective zeros
 	m_size=0;
 	m_first=nullptr;
 }
 
-template <typename T>
-Queue<T>::~Queue()
+Queue::~Queue()
 {
 	while(!(isEmpty()))//removes OGNodes until the Queue is empty
 	{
@@ -17,8 +15,7 @@ Queue<T>::~Queue()
 	}
 }
 
-template <typename T>
-bool Queue<T>::isEmpty() const
+bool Queue::isEmpty() const
 {
 	if(m_first == nullptr)//determined empty if the pointer equals nullptr
 	{
@@ -30,19 +27,18 @@ bool Queue<T>::isEmpty() const
 	}
 }
 
-template <typename T>
-void Queue<T>::enqueue(const T& newEntry)
+void Queue::enqueue(Node* newEntry)
 {
 	if(isEmpty())//makes a new OGNode with the given value if the Queue is empty
 	{
-		m_first = new OGNode<T>();
+		m_first = new OGNode();
 		m_first->setValue(newEntry);
 		m_size++;//increases size
 	}
 	else//runs through the Queue and adds a new OGNode at the end with the given value
 	{
-		OGNode<T>* temp=m_first;
-		OGNode<T>* nextNode=new OGNode<T>();
+		OGNode* temp=m_first;
+		OGNode* nextNode=new OGNode();
 		nextNode->setValue(newEntry);
 
 		while(temp->getNext() != nullptr)
@@ -56,16 +52,15 @@ void Queue<T>::enqueue(const T& newEntry)
 	}
 }
 
-template <typename T>
-void Queue<T>::dequeue()
+void Queue::dequeue()
 {
 	if(isEmpty())//queue is empty
 	{
-		return;
+
 	}
 	else//removing the first OGNode and making the second OGNode as the first OGNode
 	{
-		OGNode<T>* temp=m_first;
+		OGNode* temp=m_first;
 
 		m_first=m_first->getNext();
 
@@ -75,33 +70,14 @@ void Queue<T>::dequeue()
 	}
 }
 
-template <typename T>
-T Queue<T>::peekFront() const
+Node* Queue::peekFront() const
 {
 	if(isEmpty())//queue is empty
 	{
-		return;
+		return(nullptr);
 	}
 	else//returning the value within the first OGNode
 	{
 		return(m_first->getValue());
-	}
-}
-
-template <typename T>
-void Queue<T>::printQueue() const
-{
-	if(isEmpty())//prints out 'empty' if the Queue is empty
-	{
-		std::cout<<"empty.";
-	}
-	else//will print out all OGNodes in the Queue with a double space inbetween from the first OGNode to the last
-	{
-		OGNode<T>* temp=m_first;
-		while(temp != nullptr)
-		{
-			std::cout<<temp->getValue()<<"  ";
-			temp=temp->getNext();
-		}
 	}
 }

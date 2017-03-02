@@ -5,23 +5,22 @@
 
 #include "Node.h"
 
-template <typename T>
 class OGNode
 {
 	private:
-		int m_value;
-		OGNode<T>* m_next;
+		Node* m_value;
+		OGNode* m_next;
 
 	public:
 
 		OGNode();
 
-		void setValue(T val);
+		void setValue(Node* val);
 
-		T getValue() const;
+		Node* getValue() const;
 
-		void setNext(OGNode<T>* next);
+		void setNext(OGNode* next);
 
-		OGNode<T>* getNext() const;
+		OGNode* getNext() const;
 };
 #endif

@@ -8,87 +8,70 @@ BST::BST()
 
 BST::~BST()
 {
-     while(m_root != nullptr)
+     while(m_root->getLeft() != nullptr)
      {
           deletemin();
      }
+
+     while(m_root->getRight() != nullptr)
+     {
+          deletemax();
+     }
+
+     delete m_root;
 }
 
-void BST::insert(int value)
+bool BST::insert(int value)
 {
      if(m_root == nullptr)//passed an empty tree
      {
           m_root = new Node();//making a new node to begin the tree
           m_root->setValue(value);//setting the value
-          std::cout<<value<<" placed in tree\n";
      }
      else
      {
           if(search(value, m_root))//finds the value in the tree
           {
                std::cout<<"Value exists in tree\n";
-               return;
+               return(false);
           }
 
-          Node* temp1 = m_root;
-          Node* temp2 = recInsert(value, m_root);//finding "home" for new node
-          Node* newbie = new Node();
-          newbie->setValue(value);//setting value of the new node
-
-          while(temp1->getValue() != temp2->getValue())//finding adoptive node parent
-          {
-               if(temp2->getValue() < temp1->getValue())//value belongs in the left subtree
-               {
-                    temp1 = temp1->getLeft();
-               }
-               else//value belongs in right subtree
-               {
-                    temp1 = temp1->getRight();
-               }
-          }
-
-          if(value < temp1->getValue())//new node is the left child
-          {
-               temp1->setLeft(newbie);
-               std::cout<<value<<" placed in tree\n";
-          }
-          else//new node is the right child
-          {
-               temp1->setRight(newbie);
-               std::cout<<value<<" placed in tree\n";
-          }
+          recInsert(value, m_root);
      }
+
+     return(true);
 }
 
-Node* BST::recInsert(int value, Node*currNode)
+void BST::recInsert(int value, Node*currNode)
 {
-     Node* temp = currNode;
-     if(currNode != nullptr)//node isn't empty
+     if(value < currNode->getValue())
      {
-          if(value < temp->getValue())//belongs in left subtree
+          if(currNode->getLeft() == nullptr)
           {
-               if(temp->getLeft() != nullptr)//not an empty spot
-               {
-                    temp = recInsert(value, temp->getLeft());//keep searching
-               }
-               else//empty spot
-               {
-                    return(temp);
-               }
+               Node* newbie = new Node();
+               newbie->setValue(value);
+
+               currNode->setLeft(newbie);
           }
-          else//belongs in right subtree
+          else
           {
-               if(temp->getRight() != nullptr)//not an empty spot
-               {
-                    temp = recInsert(value, temp->getRight());//keep searching
-               }
-               else//empty spot
-               {
-                    return(temp);
-               }
+               recInsert(value, currNode->getLeft());
           }
      }
-     return(currNode);//currNode is nullptr
+     else
+     {
+          if(currNode->getRight() == nullptr)
+          {
+               Node* newbie = new Node();
+               newbie->setValue(value);
+
+               currNode->setRight(newbie);
+          }
+          else
+          {
+               recInsert(value, currNode->getRight());
+          }
+     }
 }
 
 bool BST::remove(int value)
@@ -99,13 +82,12 @@ bool BST::remove(int value)
      }
      else//value exists in tree
      {
-          std::cout<<value<<" removed\n";
-          return(recRemove(value));
+          return(recRemove(m_root, value));
      }
      return(false);//value not removed
 }
 
-bool BST::recRemove(int value)
+bool BST::recRemove(Node* temp, int value)
 {
      /*
      Three cases
@@ -113,10 +95,85 @@ bool BST::recRemove(int value)
                just delete it and set pointer to nullptr
           Single Kid
                delete node and replace with sole heir
-          Atomic Fam
+          Nuclear Fam
                find min value in right subtree
      */
-     return(true);
+     Node* parent = nullptr;
+
+     while(temp->getValue() != value)
+     {
+          if(value < temp->getValue())
+          {
+               parent = temp;
+               temp = temp->getLeft();
+          }
+          else if(value > temp->getValue())
+          {
+               parent = temp;
+               temp = temp->getRight();
+          }
+          else if(value == temp->getValue())
+          {
+               break;
+          }
+     }
+
+     //spinster, or no children
+     if((temp->getRight() == nullptr) && (temp->getLeft() == nullptr))
+     {
+          if(parent->getRight() == temp)
+          {
+               parent->setRight(nullptr);
+          }
+          else if(parent->getLeft() == temp)
+          {
+               parent->setLeft(nullptr);
+          }
+          delete temp;
+          temp = nullptr;
+          return(true);
+     }
+
+     //sole heir takes over, or has one child
+     if(((temp->getRight() != nullptr) && (temp->getLeft() == nullptr)) || ((temp->getRight() == nullptr) && (temp->getLeft() != nullptr)))
+     {
+          if((temp->getRight() != nullptr) && (temp->getLeft() == nullptr))//right child takes over
+          {
+               if(parent->getLeft() == temp)
+               {
+                    parent->setLeft(temp->getRight());
+               }
+               else if(parent->getRight() == temp)
+               {
+                    parent->setRight(temp->getRight());
+               }
+          }
+          if((temp->getRight() == nullptr) && (temp->getLeft() != nullptr))//left child takes over
+          {
+               if(parent->getLeft() == temp)
+               {
+                    parent->setLeft(temp->getLeft());
+               }
+               else if(parent->getRight() == temp)
+               {
+                    parent->setRight(temp->getLeft());
+               }
+          }
+          delete temp;
+          temp = nullptr;
+          return(true);
+     }
+
+     //Nuclear fam, or has two children
+     if((temp->getRight() != nullptr) && (temp->getLeft() != nullptr))
+     {
+          int heir = findMin(temp->getRight());
+          temp->setValue(heir);
+          recRemove(temp->getRight(), heir);
+          return(true);
+     }
+
+     return(false);//not removed
 }
 
 bool BST::search(int value, Node* currNode)
@@ -150,13 +207,13 @@ bool BST::deletemin()
 int BST::findMin(Node* node)
 {
      int min = 0;
-     if(node->getRight() == nullptr)//the min value
+     if(node->getLeft() == nullptr)//the min value
      {
           min = node->getValue();
      }
      else//not the min value in the tree
      {
-          min = findMin(node->getRight());
+          min = findMin(node->getLeft());
      }
 
      return(min);
@@ -171,13 +228,13 @@ bool BST::deletemax()
 int BST::findMax(Node* node)
 {
      int max = 0;
-     if(node->getLeft() == nullptr)//man value
+     if(node->getRight() == nullptr)//man value
      {
           max = node->getValue();
      }
      else//not the max value
      {
-          max = findMax(node->getLeft());
+          max = findMax(node->getRight());
      }
      return(max);
 }
@@ -185,6 +242,11 @@ int BST::findMax(Node* node)
 void BST::preorder()
 {
      std::cout<<"Preorder: ";
+     if(m_root == nullptr)
+     {
+          std::cout<<"Empty";
+          return;
+     }
      recPre(m_root);
      std::cout<<'\n';
 }
@@ -206,6 +268,11 @@ void BST::recPre(Node* currNode)
 void BST::inorder()
 {
      std::cout<<"Inorder: ";
+     if(m_root == nullptr)
+     {
+          std::cout<<"Empty";
+          return;
+     }
      recIn(m_root);
      std::cout<<'\n';
 }
@@ -226,36 +293,42 @@ void BST::recIn(Node* currNode)
 
 void BST::levelorder()
 {
+     Node* value = nullptr;
+
      std::cout<<"Levelorder: ";
-     recLevel(m_root);
+     if(m_root == nullptr)
+     {
+          std::cout<<"Empty";
+          return;
+     }
+
+     lvlList.enqueue(m_root);//placing root on queue
+
+     while(!lvlList.isEmpty())
+     {
+          value = lvlList.peekFront();
+          lvlList.dequeue();//removing front item
+          std::cout<<value->getValue()<<' ';//printing value
+
+          if(value->getLeft() != nullptr)//pushes left child value onto queue if not empty
+          {
+               lvlList.enqueue(value->getLeft());
+          }
+          if(value->getRight() != nullptr)//pushes right child value onto queue if not empty
+          {
+               lvlList.enqueue(value->getRight());
+          }
+     }
+
      std::cout<<'\n';
 }
 
-void BST::recLevel(Node* currNode)
+int BST::getMin()
 {
-     /*
-     recursively push all values onto Queue
-     then print values while popping off the Queue
-     */
-     if(currNode == nullptr)
-     {
-          return;
-     }
-     else
-     {
-          /*
-          NOT RIGHT, BELIEVE IT'S PREORDER
-          lvlList.enqueue(currNode->getValue());
-          recLevel(currNode->getLeft());
-          recLevel(currNode->getRight());
-          */
-          /*
-          perhaps Queue of Type Node*
-          then print node value originally passed in push left and right children (if exist) onto Queue
-          call method on next node in the list
-          pop off the Queue
-          push left and right children (if exist) onto Queue
-          and so on until all are printed
-          */
-     }
+     return(findMin(m_root));
+}
+
+int BST::getMax()
+{
+     return(findMax(m_root));
 }

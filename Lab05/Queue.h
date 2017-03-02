@@ -7,20 +7,18 @@
 #include "OGNode.h"
 #include "Node.h"
 
-template <typename T>
 class Queue
 {
 	private:
 			int m_size;
-			OGNode<T>* m_first;
+			OGNode* m_first;
 	public:
 			Queue();
 			~Queue();
 			bool isEmpty() const;
-			void enqueue(const T& newEntry);
+			void enqueue(Node* newEntry);
 			void dequeue();
-			T peekFront() const;
-			void printQueue() const;
+			Node* peekFront() const;
 };
 
 #endif
