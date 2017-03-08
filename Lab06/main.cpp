@@ -2,11 +2,15 @@
 #include <fstream>
 #include <stdlib.h>
 
+#include "minThree.h"
+
 
 void printMenu();
 
 int main(int argc, char *argv[])
 {
+     /*FIRST HALF OF LAB 6*/
+     minThreeHeap myHeap;
      int choice = 0;
 
      while(choice != 6)
@@ -16,23 +20,29 @@ int main(int argc, char *argv[])
 
           if(choice == 1)//insert
           {
-
+               int included = 0;
+               std::cout<<"Value to insert: ";
+               std::cin>>included;
+               myHeap.insert(included);
           }
           else if(choice == 2)//deletemin
           {
-
+               myHeap.deletemin();
           }
           else if(choice == 3)//deletemax
           {
-
+               myHeap.deletemax();
           }
           else if(choice == 4)//remove
           {
-
+               int banished = 0;
+               std::cout<<"Value to remove: ";
+               std::cin>>banished;
+               myHeap.remove(banished);
           }
           else if(choice == 5)//levelorder
           {
-
+               myHeap.levelorder();
           }
           else if(choice < 1 || choice > 6) // not an option
           {
@@ -44,6 +54,12 @@ int main(int argc, char *argv[])
      {
           std::cout<<"Exiting...\n\n";
      }
+
+     /*FIRST HALF OF LAB 6*/
+
+     /*SECOND HALF OF LAB 6*/
+     
+     /*SECOND HALF OF LAB 6*/
 
           return(0);
 }
