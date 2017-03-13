@@ -32,37 +32,25 @@ int main(int argc, char *argv[])
           {
 
           }
-          else if(choice == 2)//remove
+          else if(choice == 2)//deletemin
           {
 
           }
-          else if(choice == 3)//deletemin
+          else if(choice == 3)//deletemax
           {
 
           }
-          else if(choice == 4)//deletemax
+          else if(choice == 4)//levelorder
           {
 
           }
-          else if(choice == 5)//preorder
-          {
-
-          }
-          else if(choice == 6)//inorder
-          {
-
-          }
-          else if(choice == 7)//levelorder
-          {
-               
-          }
-          else if(choice < 1 || choice > 8) // not an option
+          else if(choice < 1 || choice > 5) // not an option
           {
                std::cout<<"Invalid input\n";
           }
      }
 
-     if(choice == 8)
+     if(choice == 5)
      {
           std::cout<<"Exiting...\n\n";
      }
@@ -74,11 +62,8 @@ void printMenu()
 {
      std::cout<<"\nPlease choose one of the following commands: \n"
                <<"1-insert\n"
-               <<"2-remove\n"
-               <<"3-deletemin\n"
-               <<"4-deletemax\n"
-               <<"5-preorder\n"
-               <<"6-inorder\n"
-               <<"7-levelorder\n"
-               <<"8-exit\n";
+               <<"2-deletemin\n"
+               <<"3-deletemax\n"
+               <<"4-levelorder\n"
+               <<"5-exit\n";
 }
