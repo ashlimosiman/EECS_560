@@ -2,47 +2,39 @@
 #include <fstream>
 #include <stdlib.h>
 
+#include "minMaxHeap.h"
 
 void printMenu();
 
 int main(int argc, char *argv[])
 {
-
+     minMaxHeap heapful;
      int choice = 0;
 
-     /* Filling tree with elemnets from a text file
-     std::ifstream data;
-     int input = 0;
-     data.open("data.txt");
-
-     while(data>>input)
-     {
-          mainTree.insert(input);
-     }
-
-     data.close();
-     --------------------------------------------*/
-
-     while(choice != 8)
+     while(choice != 5)
      {
           printMenu();
           std::cin>>choice;
 
           if(choice == 1)//insert
           {
+               int rookie = 0;
+               std::cout<<"Please insert the number that you want to be inserted in the tree: ";
+               std::cin>>rookie;
 
+               heapful.insert(rookie);
           }
           else if(choice == 2)//deletemin
           {
-
+               heapful.deletemin();
           }
           else if(choice == 3)//deletemax
           {
-
+               heapful.deletemax();
           }
           else if(choice == 4)//levelorder
           {
-
+               heapful.levelorder();
           }
           else if(choice < 1 || choice > 5) // not an option
           {
