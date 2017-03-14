@@ -7,11 +7,6 @@ minMaxHeap::minMaxHeap()
 
      initHeap();
      create();
-     for(int x=1; x <= m_size; x++)
-     {
-          std::cout<<m_heap[x]<<' ';
-     }
-     std::cout<<"\n\n"<<m_size<<"\n\n";
 }
 minMaxHeap::~minMaxHeap()
 {
@@ -25,41 +20,56 @@ void minMaxHeap::insert(int value)
 }
 void minMaxHeap::deletemin()
 {
-     //find index of min value
-     int min = 1;
-     for(int x = 2; x <= m_size; x++)
+     if(m_size == 0)//empty
      {
-          if(m_heap[x] < min)//smaller than current value
-          {
-               min = x;//update min
-          }
+          return;
      }
+     else
+     {
+          //find index of min value
+          int min = 1;
+          for(int x = 2; x <= m_size; x++)
+          {
+               if(m_heap[x] < min)//smaller than current value
+               {
+                    min = x;//update min
+               }
+          }
 
-     //replace min value with last value
-     m_heap[min] = m_heap[m_size];
-     m_heap[m_size] = (-1);//reset value of last "node"
-     m_size--;//decrement size
+          //replace min value with last value
+          m_heap[min] = m_heap[m_size];
+          m_heap[m_size] = (-1);//reset value of last "node"
+          m_size--;//decrement size
 
-     trickleDown(min);
+          trickleDown(min);
+     }
 }
+
 void minMaxHeap::deletemax()
 {
-     //find index of max value
-     int max = 1;
-     for(int x = 2; x <= m_size; x++)
+     if(m_size == 0)//empty
      {
-          if(m_heap[x] > m_heap[max])//bigger than current value
-          {
-               max = x;
-          }
+          return;
      }
+     else
+     {
+          //find index of max value
+          int max = 1;
+          for(int x = 2; x <= m_size; x++)
+          {
+               if(m_heap[x] > m_heap[max])//bigger than current value
+               {
+                    max = x;
+               }
+          }
 
-     //replace max value with last value
-     m_heap[max] = m_heap[m_size];
-     m_heap[m_size] = (-1);//reset value of last "node"
-     m_size--;
+          //replace max value with last value
+          m_heap[max] = m_heap[m_size];
+          m_heap[m_size] = (-1);//reset value of last "node"
+          m_size--;
 
-     trickleDown(max);
+          trickleDown(max);
+     }
 }
 void minMaxHeap::levelorder()
 {
@@ -105,7 +115,7 @@ void minMaxHeap::create()
      file.close();
 
      //bottom up organizing
-     for(int x = getParentIndex(m_size); x > 0; x--)
+     for(int x = getParentIndex(m_size); x >= 1; x--)
      {
           trickleDown(x);
      }
@@ -143,74 +153,82 @@ void minMaxHeap::trickleDown(int pos)
 
 void minMaxHeap::trickleDownMin(int pos)
 {
-     int min = getMinOffspringIndex(pos);
-
-     if(pos == getGrandparentIndex(min))//it's a grandchild
+     if(getChildIndex(pos, 0) <= m_size)
      {
-          if(m_heap[min] < m_heap[pos])//grandchild is less than grandparent
+          int min = 0;
+          min = getMinOffspringIndex(pos);
+
+          if(pos == getGrandparentIndex(min))//it's a grandchild
           {
-               //swap values
-               int temp = m_heap[pos];
-               m_heap[pos] = m_heap[min];
-               m_heap[min] = temp;
-
-               int parent = getParentIndex(min);
-
-               if(m_heap[min] > m_heap[parent])//comparing value to the parent, in a max level
+               if(m_heap[min] < m_heap[pos])//grandchild is less than grandparent
                {
                     //swap values
-                    temp = m_heap[parent];
-                    m_heap[parent] = m_heap[min];
+                    int temp = m_heap[pos];
+                    m_heap[pos] = m_heap[min];
+                    m_heap[min] = temp;
+
+                    int parent = getParentIndex(min);
+
+                    if(m_heap[min] > m_heap[parent])//comparing value to the parent, in a max level
+                    {
+                         //swap values
+                         temp = m_heap[parent];
+                         m_heap[parent] = m_heap[min];
+                         m_heap[min] = temp;
+                    }
+                    trickleDownMin(min);
+               }
+          }
+          else if(pos == getParentIndex(min))//it's a child
+          {
+               if(m_heap[min] < m_heap[pos])//child is smaller than parent
+               {
+                    //swap values
+                    int temp = m_heap[pos];
+                    m_heap[pos] = m_heap[min];
                     m_heap[min] = temp;
                }
-               trickleDownMin(min);
-          }
-     }
-     else//it's a child
-     {
-          if(m_heap[min] < m_heap[pos])//child is smaller than parent
-          {
-               //swap values
-               int temp = m_heap[pos];
-               m_heap[pos] = m_heap[min];
-               m_heap[min] = temp;
           }
      }
 }
 
 void minMaxHeap::trickleDownMax(int pos)
 {
-     int max = getMaxOffspringIndex(pos);
-
-     if(pos == getGrandparentIndex(max))//it's a grandchild
+     if(getChildIndex(pos, 0) <= m_size)
      {
-          if(m_heap[max] > m_heap[pos])//grandchild is greater than grandparent
+          int max = 0;
+          max = getMaxOffspringIndex(pos);
+
+          if(pos == getGrandparentIndex(max))//it's a grandchild
           {
-               //swap values
-               int temp = m_heap[pos];
-               m_heap[pos] = m_heap[max];
-               m_heap[max] = temp;
-
-               int parent = getParentIndex(max);
-
-               if(m_heap[max] < m_heap[parent])//comparing value to the parent, in a min level
+               if(m_heap[max] > m_heap[pos])//grandchild is greater than grandparent
                {
                     //swap values
-                    temp = m_heap[parent];
-                    m_heap[parent] = m_heap[max];
+                    int temp = m_heap[pos];
+                    m_heap[pos] = m_heap[max];
+                    m_heap[max] = temp;
+
+                    int parent = getParentIndex(max);
+
+                    if(m_heap[max] < m_heap[parent])//comparing value to the parent, in a min level
+                    {
+                         //swap values
+                         temp = m_heap[parent];
+                         m_heap[parent] = m_heap[max];
+                         m_heap[max] = temp;
+                    }
+                    trickleDownMax(max);
+               }
+          }
+          else if(pos == getParentIndex(max))//it's a child
+          {
+               if(m_heap[max] > m_heap[pos])//child is greater than parent
+               {
+                    //swap values
+                    int temp = m_heap[pos];
+                    m_heap[pos] = m_heap[max];
                     m_heap[max] = temp;
                }
-               trickleDownMax(max);
-          }
-     }
-     else//it's a child
-     {
-          if(m_heap[max] > m_heap[pos])//child is greater than parent
-          {
-               //swap values
-               int temp = m_heap[pos];
-               m_heap[pos] = m_heap[max];
-               m_heap[max] = temp;
           }
      }
 }
@@ -293,7 +311,7 @@ bool minMaxHeap::isMinLevel(int index)
      double pos = index;
      int result = int (floor(log2(pos)));//level of the index
 
-     if(result % 2)
+     if((result % 2) == 0)
      {
           return(true);//even levels are min levels
      }
@@ -309,13 +327,13 @@ int minMaxHeap::getChildIndex(int index, int child)//child must be 0 or 1
      //child of i is 2*1+child
      int childPos = (2*index)+child;
 
-     if(childPos > m_size)
+     if((childPos <= m_size) && (childPos > 0))
      {
-          return(-1);//child doesn't exist
+          return(childPos);
      }
      else
      {
-          return(childPos);
+          return(-1);//child doesn't exist
      }
 }
 
@@ -327,20 +345,20 @@ int minMaxHeap::getParentIndex(int index)
      }
      else
      {
-          return(int (floor(index/2)));
+          return(index/2);
      }
 }
 
 int minMaxHeap::getGrandchildIndex(int index, int gchild)//gchild must be 0, 1, 2, or 3
 {
      int gchildPos = (4*index)+gchild;
-     if(gchildPos < m_size)
+     if((gchildPos <= m_size) && (gchildPos > 0))
      {
-          return(-1);//doesn't exist
+          return(gchildPos);//found it
      }
      else
      {
-          return(gchildPos);//found it
+          return(-1);//doesn't exist
      }
 
 }
@@ -353,7 +371,7 @@ int minMaxHeap::getGrandparentIndex(int index)
      }
      else
      {
-          return(int (floor(index/4)));
+          return(index/4);
      }
 }
 
@@ -361,7 +379,7 @@ int minMaxHeap::getMinOffspringIndex(int index)
 {
      int min = 0;
      int firstChild = getChildIndex(index, 0);
-     int secondChild = getChildIndex(index, 0);
+     int secondChild = getChildIndex(index, 1);
      int firstG = getGrandchildIndex(index, 0);
      int secondG = getGrandchildIndex(index, 1);
      int thirdG = getGrandchildIndex(index, 2);
@@ -373,35 +391,35 @@ int minMaxHeap::getMinOffspringIndex(int index)
 
           if(secondChild > 0)//checks for second child
           {
-               if(m_heap[secondChild] < min)//checks if smaller than current min value
+               if(m_heap[secondChild] < m_heap[min])//checks if smaller than current min value
                {
                     min = secondChild;//resets min value
                }
 
                if(firstG > 0)//checks for first grandchild
                {
-                    if(m_heap[firstG] < min)//checks if smaller than current min value
+                    if(m_heap[firstG] < m_heap[min])//checks if smaller than current min value
                     {
                          min = firstG;//reset min value
                     }
 
                     if(secondG > 0)//check for second grandchild
                     {
-                         if(m_heap[secondG] < min)//checks if smaller than current min value
+                         if(m_heap[secondG] < m_heap[min])//checks if smaller than current min value
                          {
                               min = secondG;//resets min value
                          }
 
                          if(thirdG > 0)//checks for third grandchild
                          {
-                              if(m_heap[thirdG] < min)//checks if smaller than current min value
+                              if(m_heap[thirdG] < m_heap[min])//checks if smaller than current min value
                               {
                                    min = thirdG;//resets min value
                               }
 
                               if(fourthG > 0)//checks for fourth grandchild
                               {
-                                   if(m_heap[fourthG] < min)//checks if smaller than current min value
+                                   if(m_heap[fourthG] < m_heap[min])//checks if smaller than current min value
                                    {
                                         min = fourthG;//resets min value
                                    }
@@ -411,7 +429,6 @@ int minMaxHeap::getMinOffspringIndex(int index)
                }
           }
      }
-
      return(min);//returning index of smallest value
 }
 
@@ -419,7 +436,7 @@ int minMaxHeap::getMaxOffspringIndex(int index)
 {
      int max = 0;
      int firstChild = getChildIndex(index, 0);
-     int secondChild = getChildIndex(index, 0);
+     int secondChild = getChildIndex(index, 1);
      int firstG = getGrandchildIndex(index, 0);
      int secondG = getGrandchildIndex(index, 1);
      int thirdG = getGrandchildIndex(index, 2);
@@ -431,35 +448,35 @@ int minMaxHeap::getMaxOffspringIndex(int index)
 
           if(secondChild > 0)//checks for second child
           {
-               if(m_heap[secondChild] > max)//checks if bigger than current min value
+               if(m_heap[secondChild] > m_heap[max])//checks if bigger than current min value
                {
                     max = secondChild;//resets max value
                }
 
                if(firstG > 0)//checks for first grandchild
                {
-                    if(m_heap[firstG] > max)//checks if bigger than current min value
+                    if(m_heap[firstG] > m_heap[max])//checks if bigger than current min value
                     {
                          max = firstG;//reset max value
                     }
 
                     if(secondG > 0)//check for second grandchild
                     {
-                         if(m_heap[secondG] > max)//checks if bigger than current min value
+                         if(m_heap[secondG] > m_heap[max])//checks if bigger than current min value
                          {
                               max = secondG;//resets max value
                          }
 
                          if(thirdG > 0)//checks for third grandchild
                          {
-                              if(m_heap[thirdG] > max)//checks if bigger than current min value
+                              if(m_heap[thirdG] > m_heap[max])//checks if bigger than current min value
                               {
                                    max = thirdG;//resets max value
                               }
 
                               if(fourthG > 0)//checks for fourth grandchild
                               {
-                                   if(m_heap[fourthG] > max)//checks if bigger than current min value
+                                   if(m_heap[fourthG] > m_heap[max])//checks if bigger than current min value
                                    {
                                         max = fourthG;//resets max value
                                    }
