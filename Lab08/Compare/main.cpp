@@ -11,21 +11,23 @@ double leftOps[4][5];
 double skewBuild[4][5];
 double skewOps[4][5];
 
-void testHeaps(int n, int seed);
+void testHeaps(int n, int seed, int pos);
 void printResults(int* nVal);
 double averageVal(double* nums);
 
 int main(int argc, char *argv[])
 {
-     int values[4] = {50000, 100000, 200000, 400000};
-
-     std::cout<<"TESTING HEAPS\n\n";
+     int values[4];// = {50000, 100000, 200000, 400000};
+     values[0] = 50000;
+     values[1] = 100000;
+     values[2] = 200000;
+     values[3] = 400000;
 
      for(int x = 0; x < 4; x++)//n values
      {
           for(int y = 0; y < 5; y++)//seed values
           {
-               testHeaps(x, y);
+               testHeaps(values[x], y, x);
           }
      }
 
@@ -36,41 +38,54 @@ int main(int argc, char *argv[])
      return(0);
 }
 
-void testHeaps(int n, int seed)
+void testHeaps(int n, int seed, int pos)
 {
      Timer timer;
      minLeft testLeft = minLeft();
      minSkew testSkew = minSkew();
      double endTime = 0;
-     int opNum = (0.1)*n;
+     int opNum = n/10;
+     int numsAdding[n];
 
      srand(seed);
 
      //TESTING BUILDS
           //LEFTIST HEAP
      timer.start();
+     //generating numbers
      for(int x = 0; x < n; x++)
      {
-          testLeft.insert((rand() % (4*n)) + 1);
+          numsAdding[x] = (rand() % (4*n)) + 1;
+     }
+
+     for(int x = 0; x < n; x++)
+     {
+          testLeft.insert(numsAdding[x]);
      }
      endTime = timer.stop();
-     leftBuild[n][seed] = endTime;
+     leftBuild[pos][seed] = endTime;
 
           //SKEW HEAP
      timer.start();
+     //generating numbers
      for(int x = 0; x < n; x++)
      {
-          testSkew.insert((rand() % (4*n)) + 1);
+          numsAdding[x] = (rand() % (4*n)) + 1;
+     }
+
+     for(int x = 0; x < n; x++)
+     {
+          testSkew.insert(numsAdding[x]);
      }
      endTime = timer.stop();
-     skewBuild[n][seed] = endTime;
+     skewBuild[pos][seed] = endTime;
 
      //TESTING OPERATIONS
           //LEFTIST HEAP
      timer.start();
      for(int x = 0; x < opNum; x++)//number of inertions and delemins
      {
-          double operation = rand() / (double)RAND_MAX;//get number to decide which operation to do
+          double operation = rand()/(double)RAND_MAX;//get number to decide which operation to do
 
           if(operation < (0.5))//will deleteMin
           {
@@ -82,13 +97,13 @@ void testHeaps(int n, int seed)
           }
      }
      endTime = timer.stop();
-     leftOps[n][seed] = endTime;
+     leftOps[pos][seed] = endTime;
 
           //SKEW HEAP
      timer.start();
      for(int x = 0; x < opNum; x++)//number of inertions and delemins
      {
-          double operation = rand() / (double)RAND_MAX;//get number to decide which operation to do
+          double operation = rand()/(double)RAND_MAX;//get number to decide which operation to do
 
           if(operation < (0.5))//will deleteMin
           {
@@ -100,7 +115,7 @@ void testHeaps(int n, int seed)
           }
      }
      endTime = timer.stop();
-     skewOps[n][seed] = endTime;
+     skewOps[pos][seed] = endTime;
 }
 
 void printResults(int* nVal)
@@ -171,7 +186,7 @@ double averageVal(double* nums)
           total = total + nums[x];
      }
 
-     avg = total/5;//average of the total
+     avg = total/(double)5;//average of the total
 
      return(avg);
 }
