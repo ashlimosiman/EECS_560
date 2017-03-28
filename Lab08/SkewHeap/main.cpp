@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 {
      std::cout<<"Skew Heap: \n";
      int choice = 0;
-     minSkew theHeap;
+     minSkew theHeap = minSkew();
 
      /*ADDING VALUES FROM FILE*/
      int adding = 0;

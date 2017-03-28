@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 {
      std::cout<<"Leftist Heap: \n";
      int choice = 0;
-     minLeft theHeap;
+     minLeft theHeap = minLeft();
 
      /*ADDING VALUES FROM FILE*/
      int adding = 0;
