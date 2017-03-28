@@ -1,12 +1,12 @@
-#include "minSkew.h"
+#include "minLeftist.h"
 
-minSkew::minSkew()
+minLeft::minLeft()
 {
      m_size = 0;
      m_root = nullptr;
 }
 
-minSkew::~minSkew()
+minLeft::~minLeft()
 {
      while(!isEmpty())
      {
@@ -14,7 +14,7 @@ minSkew::~minSkew()
      }
 }
 
-bool minSkew::isEmpty()
+bool minLeft::isEmpty()
 {
      if(m_size == 0)
      {
@@ -26,10 +26,10 @@ bool minSkew::isEmpty()
      }
 }
 
-void minSkew::insert(int value)
+void minLeft::insert(int value)
 {
      //create a new node with the value passed in
-     SHNode* newbie = new SHNode();
+     LHNode* newbie = new LHNode();
      newbie->setValue(value);
 
      m_root = merge(m_root, newbie);// merge the current heap with the new node
@@ -37,7 +37,7 @@ void minSkew::insert(int value)
      m_size++;//increment size of heap
 }
 
-void minSkew::deletemin()
+void minLeft::deletemin()
 {
      if(isEmpty())//nothing to deletemin
      {
@@ -46,8 +46,8 @@ void minSkew::deletemin()
      else
      {
           //gain scope on the subtrees from alternate objects
-          SHNode* leftSub = m_root->getLeft();
-          SHNode* rightSub = m_root->getRight();
+          LHNode* leftSub = m_root->getLeft();
+          LHNode* rightSub = m_root->getRight();
 
           delete m_root;//deleting min value
 
@@ -68,11 +68,11 @@ void minSkew::deletemin()
      }
 }
 
-void minSkew::levelorder()
+void minLeft::levelorder()
 {
-     SHNode* value = nullptr;
+     LHNode* value = nullptr;
 
-     std::cout<<"Levelorder: ";
+     std::cout<<"Levelorder: \n";
      if(m_root == nullptr)
      {
           std::cout<<"Empty";
@@ -80,11 +80,29 @@ void minSkew::levelorder()
      }
 
      middleman.enqueue(m_root);//placing root on queue
+     middleman.enqueue(nullptr);//indicates new level
 
      while(!middleman.isEmpty())
      {
           value = middleman.peekFront();
           middleman.dequeue();//removing front item
+
+          if(value == nullptr)//print a new line
+          {
+               std::cout<<'\n';
+
+               if(!middleman.isEmpty())//still more nodes to print
+               {
+                    value = middleman.peekFront();
+                    middleman.dequeue();//removing front item
+                    middleman.enqueue(nullptr);//indicates end of this level
+               }
+               else
+               {
+                    return;
+               }
+          }
+
           std::cout<<value->getValue()<<' ';//printing value
 
           if(value->getLeft() != nullptr)//pushes left child value onto queue if not empty
@@ -100,7 +118,7 @@ void minSkew::levelorder()
      std::cout<<'\n';
 }
 
-void minSkew::preorder()
+void minLeft::preorder()
 {
      std::cout<<"Preorder: ";
      if(m_root == nullptr)
@@ -112,7 +130,7 @@ void minSkew::preorder()
      std::cout<<'\n';
 }
 
-void minSkew::recPre(SHNode* curr)
+void minLeft::recPre(LHNode* curr)
 {
      if(curr == nullptr)
      {
@@ -126,7 +144,7 @@ void minSkew::recPre(SHNode* curr)
      }
 }
 
-void minSkew::inorder()
+void minLeft::inorder()
 {
      std::cout<<"Inorder: ";
      if(m_root == nullptr)
@@ -138,7 +156,7 @@ void minSkew::inorder()
      std::cout<<'\n';
 }
 
-void minSkew::recIn(SHNode* curr)
+void minLeft::recIn(LHNode* curr)
 {
      if(curr == nullptr)//will not print value, snce node is empty
      {
@@ -152,7 +170,7 @@ void minSkew::recIn(SHNode* curr)
      }
 }
 
-SHNode* minSkew::merge(SHNode* first, SHNode* second)
+LHNode* minLeft::merge(LHNode* first, LHNode* second)
 {
      if(first == nullptr)//first is an empty tree
      {
@@ -167,18 +185,39 @@ SHNode* minSkew::merge(SHNode* first, SHNode* second)
           //swap trees if necessary
           if(first->getValue() > second->getValue())
           {
-               SHNode* holder = second;
+               LHNode* holder = second;
                second = first;
                first = holder;
           }
 
-          SHNode* rightSide = merge(first->getRight(), second);//merging right subtree with second tree
+          LHNode* rightSide = merge(first->getRight(), second);//merging right subtree with second tree
           first->setRight(rightSide);//updating new right subtree
 
-          //skew heaps swap after every merge
-          SHNode* holder = first->getRight();
-          first->setRight(first->getLeft());
-          first->setLeft(holder);
+          //deal with the rank value
+          if((first->getLeft() == nullptr) || (first->getRight() == nullptr))//doesn't have two children
+          {
+               first->setRank(1);
+          }
+          else//has both children
+          {
+               first->setRank((first->getRight()->getRank()) + 1);
+          }
+
+          //hold up rules of a leftist tree
+          if(first->getLeft() == nullptr)//no left subtree
+          {
+               first->setLeft(first->getRight());//move right subtree to the left subtree
+               first->setRight(nullptr);//now there's no right subtree, since it was moved to the left side
+          }
+          else//left subtree exists
+          {
+               if((first->getLeft()->getRank()) < (first->getRight()->getRank()))//breaking rule of leftist tree, so swap em
+               {
+                    LHNode* holder = first->getRight();
+                    first->setRight(first->getLeft());
+                    first->setLeft(holder);
+               }
+          }
      }
 
      return first;
