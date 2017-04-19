@@ -8,11 +8,11 @@
 class Node
 {
      private:
-          int m_order;
-          int m_key;
-          Node* left;
-          Node* right;
-          Node* first;
+          int m_order;//which binomial it is i.e. B0, B1, B2,...
+          int m_key;//value
+          Node* left;//left sibling, will wrap around at the end nodes
+          Node* right;//right sibling
+          Node* first;//just the first child
 
      public:
           Node();
